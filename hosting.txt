@@ -1,0 +1,6 @@
+url: https://radio-checklist.000webhostapp.com
+password: hs@YQWV6PE3x)GM$tDT7
+
+db_name: id9310158_radio_checklist
+db_user: id9310158_admin
+db_password: hs@YQWV6PE3x)GM$tDT7

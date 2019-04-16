@@ -19,7 +19,13 @@ Route::get('/theme/ship-list', 'ThemeController@shipList');
 Route::get('/login', 'AuthController@index');
 Route::post('/login', 'AuthController@login')->name('login');
 
-Route::middleware('auth')->group(function () {
+//Route::middleware('auth')->group(function () {
+
+//Laravel Auth web routes
+Auth::routes();
+
+// Auth protected web routes
+Route::group(['middleware' => ['web', 'auth']], function () {
     Route::get('/dashboard', 'AppController@index')->name('dashboard');
     Route::get('/logout', 'AuthController@logout')->name('logout');
 

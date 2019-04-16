@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:api')->group(function () {
     // Ship
     Route::get('/ship/list',
     ['as' => 'api.ship.list', 'uses' => 'Api\ApiShipController@index']);
@@ -35,5 +35,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     // Radio
     Route::get('/radio/list',
     ['as' => 'api.radio.list', 'uses' => 'Api\ApiRadioController@index']);
-// });
+});
 

@@ -1,8 +1,11 @@
 <template>
   <div class="container">
+    <flash-message class="flash-message"></flash-message>
+    <vue-element-loading :active="isLoading" spinner="spinner" text="Memproses data..."/>
+
     <div class="row justify-content-center">
       <div class="col-md-12">
-        <form name="shipForm">
+        <form name="shipForm" v-on:submit.prevent="submit()">
           <div class="card">
             <div class="card-header bg-primary text-white">
               <div class="row">
@@ -181,33 +184,28 @@
                   <th>Serial Number</th>
                   <th>Kamer/ Approval</th>
                 </tr>
-                <tr v-for="(data, index) in radio">
+                <tr v-for="(r, index) in radio">
                   <td>{{ index + 1 }}</td>
-                  <td>{{ data.name }}</td>
+                  <td>{{ r.name }}</td>
                   <td>
-                    <input
-                      type="checkbox"
-                      class="form-control"
-                      :id="data.id"
-                      v-model="data.checked"
-                    >
+                    <input type="checkbox" class="form-control" :id="r.id" v-model="r.checked">
                   </td>
                   <td>
-                    <input type="text" class="form-control" id="merk" v-model="data.merk">
+                    <input type="text" class="form-control" id="merk" v-model="r.merk">
                   </td>
                   <td>
-                    <input type="text" class="form-control" id="type" v-model="data.type">
+                    <input type="text" class="form-control" id="type" v-model="r.type">
                   </td>
                   <td>
                     <input
                       type="text"
                       class="form-control"
                       id="serialNumber"
-                      v-model="data.serial_number"
+                      v-model="r.serial_number"
                     >
                   </td>
                   <td>
-                    <input type="text" class="form-control" id="approval" v-model="data.approval">
+                    <input type="text" class="form-control" id="approval" v-model="r.approval">
                   </td>
                 </tr>
               </table>
@@ -216,7 +214,7 @@
             <div class="card-footer">
               <div class="text-right">
                 <a href="/dashboard" class="btn btn-danger">Batal</a>&nbsp;&nbsp;
-                <a v-on:click="submit()" class="btn btn-primary">Simpan</a>
+                <button type="submit" class="btn btn-primary">Simpan</button>
               </div>
             </div>
           </div>
@@ -232,8 +230,29 @@ export default {
   },
   data() {
     return {
-      ship: [],
-      radio: []
+      ship: {
+        ship_name: "",
+        call_sign: "",
+        port_register: "",
+        gross_tonnage: "",
+        imo_number: "",
+        mmsi_number: "",
+        no_reg: "",
+        radio_area: "",
+        no_sikr: "",
+        berlaku_sampai: "",
+        cart_oru1: "",
+        atas_nama1: "",
+        cart_oru2: "",
+        atas_nama2: "",
+        thn_letak_lunas: "",
+        tempat_pemeriksaan: "",
+        tanggal_pemeriksaan: "",
+        daerah_pelayaran: "",
+        detail: []
+      },
+      radio: [],
+      isLoading: false
     };
   },
   methods: {
@@ -254,6 +273,8 @@ export default {
             vm.radio[idx].serial_number = value.serial_number;
             vm.radio[idx].approval = value.approval;
           });
+
+          vm.isLoading = false;
         })
         .catch(function(error) {
           console.log(error);
@@ -261,6 +282,7 @@ export default {
     },
     fetchRadioData() {
       var vm = this;
+      this.isLoading = true;
 
       axios
         .get("/api/radio/list")
@@ -269,6 +291,8 @@ export default {
 
           if (vm.$route.params.id) {
             vm.fetchShipData(vm.$route.params.id);
+          } else {
+            vm.isLoading = false;
           }
         })
         .catch(function(error) {
@@ -277,7 +301,8 @@ export default {
     },
     addDetail() {
       var vm = this;
-      vm.ship.detail = [];
+
+      this.ship.detail = [];
 
       this.radio.forEach(function(value, key) {
         if (value.checked) {
@@ -302,13 +327,16 @@ export default {
     },
     submit() {
       var vm = this;
+      this.isLoading = true;
 
       vm.addDetail();
 
       axios
-        .post("/api/ship/create", this.ship)
+        .post("/api/ship/create", vm.ship)
         .then(function(resp) {
-          console.log(resp); //Vue.set(vm.$data, "radio", resp.data.radio);
+          vm.flash(resp.data.message, "success");
+          vm.isLoading = false;
+          vm.$router.push("/dashboard");
         })
         .catch(function(error) {
           console.log(error);

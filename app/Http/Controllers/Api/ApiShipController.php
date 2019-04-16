@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Ship;
 use App\ShipDetail;
 
@@ -91,7 +93,7 @@ class ApiShipController extends Controller
 
         $ship = Ship::findOrNew($request->id);
 
-        $ship->admin_id             = '1';//$request->admin_id;
+        $ship->admin_id             = Auth::id();
         $ship->ref_no               = $ref_no;
         $ship->ship_name            = $request->ship_name;
         $ship->call_sign            = $request->call_sign;
@@ -112,7 +114,6 @@ class ApiShipController extends Controller
         $ship->tanggal_pemeriksaan  = $request->tanggal_pemeriksaan;
         $ship->daerah_pelayaran     = $request->daerah_pelayaran;
 
-        //$repo = new Ship($ship);
         $ship->save();
 
         if (!empty($detail)) {
@@ -132,7 +133,7 @@ class ApiShipController extends Controller
                 ]);
             }
         }
-
+        
         return response() -> json([
             'message' => 'Data berhasil disimpan'
         ]);
@@ -147,7 +148,7 @@ class ApiShipController extends Controller
         $row->delete();
         
         return response() -> json([
-            'message' => 'Data kapal berhasil dihapus'
+            'message' => 'Data kapal telah dihapus'
         ]);
     }
 

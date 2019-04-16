@@ -24,6 +24,10 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "vue-router": "^3.0.2"
+        "i": "^0.3.6",
+        "vue-element-loading": "^1.1.1",
+        "vue-flash-message": "^0.7.2",
+        "vue-router": "^3.0.2",
+        "vuejs-dialog": "^1.4.0"
     }
 }

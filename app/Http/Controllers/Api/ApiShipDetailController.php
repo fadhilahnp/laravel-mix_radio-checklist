@@ -30,14 +30,4 @@ class ApiShipDetailController extends Controller
             'shipDetail' => $row
         ]);
     }
-
-    public function store(Request $request)
-    {
-
-    }
-
-    public function destroy(Request $request)
-    {
-        
-    }
 }
