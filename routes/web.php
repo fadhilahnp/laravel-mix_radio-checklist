@@ -22,7 +22,7 @@ Route::post('/login', 'AuthController@login')->name('login');
 //Route::middleware('auth')->group(function () {
 
 //Laravel Auth web routes
-Auth::routes();
+//Auth::routes();
 
 // Auth protected web routes
 Route::group(['middleware' => ['web', 'auth']], function () {

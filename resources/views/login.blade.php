@@ -8,13 +8,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Panel Radio Checklist</title>
+    <title>Login Radio Checklist</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
 <body>
+    @if (session('message'))
+    <div class="alert alert-danger text-center" role="alert">{{ session('message') }}</div>
+    @endif
     <form method="POST" action="{{ route('login') }}">
         {{ csrf_field() }}
         <div class="card mx-auto mt-5" style="width: 25rem;">

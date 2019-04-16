@@ -12,20 +12,22 @@ class AuthController extends Controller
         if(Auth::check())
             return  redirect()->route('dashboard');
 
+        if(Auth::viaRemember())
+            return  redirect()->route('dashboard');
+
         return view('login');
     }
 
     public function login(Request $request)
     {
-        return response() -> json([
-            'req' => $request->remember_me
-        ]);
-        // if (!Auth::attempt(['email'=>$request->email, 'password'=>$request->password]))
-        // {
-        //     return redirect()->back();
-        // }
+        $remember_me = $request->has('remember_me') ? true : false;
 
-        // return redirect()->route('dashboard');
+        if (!Auth::attempt(['email'=>$request->email, 'password'=>$request->password], $remember_me))
+        {
+            return redirect()->back()->with('message','Email atau password salah, mohon periksa kembali.');
+        }
+
+        return redirect()->route('dashboard');
     }
 
     public function logout()

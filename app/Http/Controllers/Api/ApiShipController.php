@@ -148,7 +148,7 @@ class ApiShipController extends Controller
         $row->delete();
         
         return response() -> json([
-            'message' => 'Data kapal telah dihapus'
+            'message' => 'Data telah dihapus'
         ]);
     }
 

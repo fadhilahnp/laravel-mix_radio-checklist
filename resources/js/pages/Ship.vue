@@ -122,7 +122,6 @@ export default {
         });
     },
     destroyShipData(id) {
-      console.log(id);
       var vm = this;
 
       let message = {

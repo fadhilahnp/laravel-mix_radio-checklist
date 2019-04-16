@@ -20,7 +20,7 @@ class CreateShipDetailTable extends Migration
             $table->string('merk', 45)->nullable();
             $table->string('type', 45)->nullable();
             $table->string('serial_number', 45)->nullable();
-            $table->string('approval', 45)->nullable();
+            $table->string('approval', 100)->nullable();
             $table->timestamps();
         });
     }
