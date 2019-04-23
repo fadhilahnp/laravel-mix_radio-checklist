@@ -3,15 +3,15 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
-// require("./bootstrap");
-
 window.Vue = require("vue");
 
 import "./bootstrap";
 import Vue from "vue";
 import Routes from "@/js/routes.js";
 import App from "@/js/views/App";
+import VueElementLoading from 'vue-element-loading';
+import VueFlashMessage from 'vue-flash-message';
+import VuejsDialog from 'vuejs-dialog';
 
 /**
  * The following block of code may be used to automatically register your
@@ -21,16 +21,12 @@ import App from "@/js/views/App";
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
-// Vue.component(
-//     "example-component",
-//     require("./components/ExampleComponent.vue").default
-// );
-
 Vue.component("header-bar", require("@/js/components/Header.vue").default);
 Vue.component("footer-bar", require("@/js/components/Footer.vue").default);
+Vue.component('VueElementLoading', VueElementLoading);
+Vue.component('passport-clients', require('@/js/components/passport/Clients.vue').default);
+Vue.component('passport-authorized-clients', require('@/js/components/passport/AuthorizedClients.vue').default);
+Vue.component('passport-personal-access-tokens', require('@/js/components/passport/PersonalAccessTokens.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -38,9 +34,18 @@ Vue.component("footer-bar", require("@/js/components/Footer.vue").default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// const app = new Vue({
-//     el: "#app"
-// });
+Vue.use(VueFlashMessage, {
+        messageOptions: {
+            timeout: 2500,
+            pauseOnInteract: true
+        }
+    });
+
+Vue.use(VuejsDialog,{
+        okText: 'Ya',
+        cancelText: 'Batal',
+        backdropClose: true
+    });
 
 const app = new Vue({
     el: "#app",

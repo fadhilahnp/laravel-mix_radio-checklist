@@ -17,7 +17,7 @@ class ShipSeeder extends Seeder
 
         foreach (range(1, 50) as $key=>$value) {
             Ship::create([
-                'admin_id' => '1',
+                'admin_id' => $faker->numberBetween($min = 1, $max = 2),
                 'ref_no' => $key + 1,
                 'ship_name' => $faker->firstName,
                 'call_sign' => $faker->company,

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <flash-message class="flash-message"></flash-message>
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="card">
@@ -15,6 +16,7 @@
           </div>
 
           <div class="card-body">
+            <vue-element-loading :active="isLoading" spinner="spinner" text="Mengambil data..."/>
             <table class="table table-hover table-sm table-responsive">
               <tr class="text-nowrap bg-light">
                 <th style="width: 10px">#</th>
@@ -29,25 +31,24 @@
                 <th>Nama Admin</th>
                 <th>Action</th>
               </tr>
-              <tr v-for="(data, index) in ship.data">
+              <tr v-for="(s, index) in ship.data">
                 <td>{{ index + ship.from }}</td>
-                <td>{{ data.ship_name }}</td>
-                <td>{{ data.call_sign }}</td>
-                <td>{{ data.port_register }}</td>
-                <td>{{ data.gross_tonnage }}</td>
-                <td>{{ data.imo_number }}</td>
-                <td>{{ data.mmsi_number }}</td>
-                <td>{{ data.no_reg }}</td>
-                <td>{{ data.radio_area }}</td>
-                <td>{{ data.admin_name }}</td>
+                <td>{{ s.ship_name }}</td>
+                <td>{{ s.call_sign }}</td>
+                <td>{{ s.port_register }}</td>
+                <td>{{ s.gross_tonnage }}</td>
+                <td>{{ s.imo_number }}</td>
+                <td>{{ s.mmsi_number }}</td>
+                <td>{{ s.no_reg }}</td>
+                <td>{{ s.radio_area }}</td>
+                <td>{{ s.admin_name }}</td>
                 <td>
                   <div class="text-center text-nowrap">
-                    <a :href="'/ship/' + data.id" class="btn btn-warning">Edit</a>&nbsp;&nbsp;
-                    <a
-                      href="#"
+                    <a :href="'/ship/' + s.id" class="btn btn-warning">Edit</a>&nbsp;&nbsp;
+                    <button
                       class="btn btn-danger"
-                      v-on:click="destroyShipData(data.id)"
-                    >Hapus</a>
+                      v-on:click="destroyShipData(s.id)"
+                    >Hapus</button>
                   </div>
                 </td>
               </tr>
@@ -61,7 +62,7 @@
                   <li class="page-item" v-bind:class="{ disabled : !ship.prev_page_url }">
                     <a
                       class="page-link"
-                      href="#"
+                      href="javascript:void(0);"
                       v-on:click="gotoPage(ship.prev_page_url)"
                     >&laquo; Pref</a>
                   </li>
@@ -72,14 +73,14 @@
                   >
                     <a
                       class="page-link"
-                      href="#"
+                      href="javascript:void(0);"
                       v-on:click="gotoPage(ship.path + '?page=' + x)"
                     >{{ x }}</a>
                   </li>
                   <li class="page-item" v-bind:class="{ disabled : !ship.next_page_url }">
                     <a
                       class="page-link"
-                      href="#"
+                      href="javascript:void(0);"
                       v-on:click="gotoPage(ship.next_page_url)"
                     >Next &raquo;</a>
                   </li>
@@ -101,17 +102,20 @@ export default {
   },
   data() {
     return {
-      ship: {}
+      ship: {},
+      isLoading: false
     };
   },
   methods: {
     fetchShipData() {
       var vm = this;
+      this.isLoading = true;
 
       axios
         .get("api/ship/list")
         .then(function(resp) {
           Vue.set(vm.$data, "ship", resp.data.ship);
+          vm.isLoading = false;
         })
         .catch(function(error) {
           console.log(error);
@@ -120,14 +124,22 @@ export default {
     destroyShipData(id) {
       var vm = this;
 
-      axios
-        .delete("api/ship/" + id)
-        .then(function(resp) {
-          vm.fetchShipData();
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      let message = {
+        title: "Peringatan",
+        body: "Data akan dihapus. Lanjutkan?"
+      };
+
+      this.$dialog.confirm(message).then(function() {
+        axios
+          .delete("api/ship/" + id)
+          .then(function(resp) {
+            vm.fetchShipData();
+            vm.flash(resp.data.message, "success");
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      });
     },
     gotoPage(url) {
       var vm = this;
