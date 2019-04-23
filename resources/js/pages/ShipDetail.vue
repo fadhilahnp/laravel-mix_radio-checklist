@@ -91,12 +91,12 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="name">Berlaku Sampai:</label>
-                        <input
-                          type="text"
-                          class="form-control"
+                        <date-picker
+                          type="date"
                           id="berlakuSampai"
                           v-model="ship.berlaku_sampai"
-                        >
+                          :lang="lang"
+                        ></date-picker>
                       </div>
                     </div>
                   </div>
@@ -150,12 +150,12 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="name">Tanggal Pemeriksaan:</label>
-                        <input
-                          type="text"
-                          class="form-control"
+                        <date-picker
+                          type="date"
                           id="tanggalPemberitaan"
                           v-model="ship.tanggal_pemeriksaan"
-                        >
+                          :lang="lang"
+                        ></date-picker>
                       </div>
                     </div>
                   </div>
@@ -224,12 +224,41 @@
   </div>
 </template>
 <script>
+import DatePicker from "vue2-datepicker";
+
 export default {
+  components: { DatePicker },
   mounted() {
     this.fetchRadioData();
   },
   data() {
     return {
+      lang: {
+        days: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+        months: [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "Mei",
+          "Jun",
+          "Jul",
+          "Agu",
+          "Sep",
+          "Okt",
+          "Nov",
+          "Des"
+        ],
+        pickers: [
+          "next 7 days",
+          "next 30 days",
+          "previous 7 days",
+          "previous 30 days"
+        ],
+        placeholder: {
+          date: "Pilih Tanggal"
+        }
+      },
       ship: {
         ship_name: "",
         call_sign: "",
