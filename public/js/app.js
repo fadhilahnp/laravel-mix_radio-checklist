@@ -2603,6 +2603,24 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2699,6 +2717,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.fetchShipData();
@@ -2706,6 +2725,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       ship: {},
+      keyword: "",
       isLoading: false
     };
   },
@@ -2735,14 +2755,25 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    gotoPage: function gotoPage(url) {
+    gotoPage: function gotoPage(url, index) {
       var vm = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(function (resp) {
+      var base = url.slice(0, -1);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(base + index).then(function (resp) {
         Vue.set(vm.$data, "ship", resp.data.ship);
       }).catch(function (error) {
         console.log(error);
       });
-    }
+    },
+    doSearch: lodash__WEBPACK_IMPORTED_MODULE_1___default.a.debounce(function () {
+      var vm = this;
+      this.isLoading = true;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("api/ship/list?keyword=" + vm.keyword).then(function (resp) {
+        Vue.set(vm.$data, "ship", resp.data.ship);
+        vm.isLoading = false;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }, 700)
   }
 });
 
@@ -2759,18 +2790,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/lib/index.js");
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue2_datepicker__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -40138,10 +40157,45 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "row justify-content-center" }, [
         _c("div", { staticClass: "col-md-12" }, [
+          _c("div", { staticClass: "card mb-3" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.keyword,
+                    expression: "keyword"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "keyword",
+                  placeholder: "Kata kunci"
+                },
+                domProps: { value: _vm.keyword },
+                on: {
+                  keyup: function($event) {
+                    return _vm.doSearch()
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.keyword = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-header bg-primary" }, [
               _c("div", { staticClass: "row" }, [
-                _vm._m(0),
+                _vm._m(1),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-md-6 text-right" }, [
                   _c(
@@ -40174,7 +40228,7 @@ var render = function() {
                     staticClass: "table table-hover table-sm table-responsive"
                   },
                   [
-                    _vm._m(1),
+                    _vm._m(2),
                     _vm._v(" "),
                     _vm._l(_vm.ship.data, function(s, index) {
                       return _c("tr", [
@@ -40282,7 +40336,8 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     return _vm.gotoPage(
-                                      _vm.ship.path + "?page=" + x
+                                      _vm.ship.first_page_url,
+                                      x
                                     )
                                   }
                                 }
@@ -40329,6 +40384,14 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header bg-secondary text-white" }, [
+      _c("h2", [_vm._v("Pencarian")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

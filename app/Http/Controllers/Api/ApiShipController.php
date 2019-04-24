@@ -13,11 +13,24 @@ use App\ShipDetail;
 
 class ApiShipController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // $ship = Ship::join('users', 'users.id', '=', 'ship.admin_id')
+        // ->select('ship.*', 'users.name as admin_name')
+        // ->paginate(10);
+
         $ship = Ship::join('users', 'users.id', '=', 'ship.admin_id')
         ->select('ship.*', 'users.name as admin_name')
+        ->when($request->keyword, function ($query) use ($request) {
+            return $query->where('ship_name', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('call_sign', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('port_register', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('radio_area', 'LIKE', '%' . $request->keyword . '%')
+                ->orWhere('users.name', 'LIKE', '%' . $request->keyword . '%');
+        })
         ->paginate(10);
+
+        $ship->appends($request->only('keyword'));
 
         return response() -> json([
             'ship' => $ship
