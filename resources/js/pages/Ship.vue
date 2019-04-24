@@ -3,6 +3,22 @@
     <flash-message class="flash-message"></flash-message>
     <div class="row justify-content-center">
       <div class="col-md-12">
+        <div class="card mb-3">
+          <div class="card-header bg-secondary text-white">
+            <h2>Pencarian</h2>
+          </div>
+          <div class="card-body">
+            <input
+              type="text"
+              class="form-control"
+              name="keyword"
+              placeholder="Pencarian Nama Kapal, Call Sign, Port Register, Rado Area, Nama Admin"
+              v-model="keyword"
+              v-on:keyup="doSearch()"
+            >
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-header bg-primary">
             <div class="row">
@@ -74,7 +90,7 @@
                     <a
                       class="page-link"
                       href="javascript:void(0);"
-                      v-on:click="gotoPage(ship.path + '?page=' + x)"
+                      v-on:click="gotoPage(ship.first_page_url, x)"
                     >{{ x }}</a>
                   </li>
                   <li class="page-item" v-bind:class="{ disabled : !ship.next_page_url }">
@@ -95,6 +111,7 @@
 </template>
 <script>
 import axios from "axios";
+import _ from "lodash";
 
 export default {
   mounted() {
@@ -103,6 +120,7 @@ export default {
   data() {
     return {
       ship: {},
+      keyword: "",
       isLoading: false
     };
   },
@@ -141,18 +159,33 @@ export default {
           });
       });
     },
-    gotoPage(url) {
+    gotoPage(url, index) {
       var vm = this;
+      let base = url.slice(0, -1);
 
       axios
-        .get(url)
+        .get(base + index)
         .then(function(resp) {
           Vue.set(vm.$data, "ship", resp.data.ship);
         })
         .catch(function(error) {
           console.log(error);
         });
-    }
+    },
+    doSearch: _.debounce(function() {
+      var vm = this;
+      this.isLoading = true;
+
+      axios
+        .get("api/ship/list?keyword=" + vm.keyword)
+        .then(function(resp) {
+          Vue.set(vm.$data, "ship", resp.data.ship);
+          vm.isLoading = false;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 700)
   }
 };
 </script>

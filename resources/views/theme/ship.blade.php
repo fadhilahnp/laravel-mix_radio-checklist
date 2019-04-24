@@ -19,6 +19,17 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-header bg-secondary text-white">
+                        <h2>Pencarian</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="/search" method="POST" role="search">
+                            <input type="text" class="form-control" name="keyword" placeholder="Pencarian Nama Kapal, Call Sign, Port Register, Nama Admin">
+                        </form>
+                    </div>
+
+                </div>
                 <div class="card">
                     <div class="card-header bg-primary">
                         <div class="row">
