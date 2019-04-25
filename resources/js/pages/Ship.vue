@@ -8,14 +8,23 @@
             <h2>Pencarian</h2>
           </div>
           <div class="card-body">
-            <input
-              type="text"
-              class="form-control"
-              name="keyword"
-              placeholder="Pencarian Nama Kapal, Call Sign, Port Register, Rado Area, Nama Admin"
-              v-model="keyword"
-              v-on:keyup="doSearch()"
-            >
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                name="keyword"
+                placeholder="Pencarian Nama Kapal, Call Sign, Port Register, Rado Area, Nama Admin"
+                v-model="keyword"
+                v-on:keyup="doSearch()"
+              >
+              <button
+                class="btn bg-transparent"
+                style="margin-left: -40px; z-index: 100;"
+                v-on:click="clear()"
+              >
+                <font-awesome-icon icon="times"></font-awesome-icon>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -26,7 +35,9 @@
                 <h4>Perangkat Radio</h4>
               </div>
               <div class="col-md-6 text-right">
-                <a :href="'/ship-detail'" class="btn btn-light">Tambah Data</a>
+                <a :href="'/ship-detail'" class="text-white h1">
+                  <font-awesome-icon icon="plus-square"/>
+                </a>
               </div>
             </div>
           </div>
@@ -60,13 +71,17 @@
                 <td>{{ s.admin_name }}</td>
                 <td>
                   <div class="text-center text-nowrap">
-                    <a :href="'/ship/' + s.id" class="btn btn-warning">Edit</a>&nbsp;&nbsp;
-                    <button
-                      class="btn btn-danger"
-                      v-on:click="destroyShipData(s.id)"
-                    >Hapus</button>
+                    <a :href="'/ship/' + s.id" class="btn btn-warning">
+                      <font-awesome-icon icon="edit"/>
+                    </a>&nbsp;&nbsp;
+                    <button class="btn btn-danger" v-on:click="destroyShipData(s.id)">
+                      <font-awesome-icon icon="trash-alt"/>
+                    </button>
                   </div>
                 </td>
+              </tr>
+              <tr v-if="ship.total < 1">
+                <td colspan="12" class="py-3 text-center text-muted">Data tidak ditemukan.</td>
               </tr>
             </table>
           </div>
@@ -171,6 +186,10 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    clear() {
+      this.keyword = "";
+      this.doSearch();
     },
     doSearch: _.debounce(function() {
       var vm = this;

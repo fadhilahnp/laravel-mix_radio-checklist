@@ -41,12 +41,23 @@
                   </div>
                   <div class="form-group">
                     <label for="name">Gross Tonnage:</label>
-                    <input
+                    <!-- <input
                       type="text"
                       class="form-control"
                       id="grossTonnage"
                       v-model="ship.gross_tonnage"
-                    >
+                    >-->
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="grossTonnage"
+                        v-model="ship.gross_tonnage"
+                      >
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">Ton</span>
+                      </div>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="name">IMO Number:</label>
@@ -96,7 +107,8 @@
                           id="berlakuSampai"
                           v-model="ship.berlaku_sampai"
                           :lang="lang"
-                        ></date-picker>
+                          class="w-100"
+                        />
                       </div>
                     </div>
                   </div>
@@ -128,12 +140,13 @@
                   </div>
                   <div class="form-group">
                     <label for="name">Thn Letak Lunas:</label>
-                    <input
-                      type="text"
-                      class="form-control"
+                    <date-picker
+                      type="year"
+                      format="YYYY"
                       id="thnLetakLunas"
                       v-model="ship.thn_letak_lunas"
-                    >
+                      class="w-100"
+                    />
                   </div>
                   <div class="row">
                     <div class="col-md-6">
@@ -155,7 +168,8 @@
                           id="tanggalPemberitaan"
                           v-model="ship.tanggal_pemeriksaan"
                           :lang="lang"
-                        ></date-picker>
+                          class="w-100"
+                        />
                       </div>
                     </div>
                   </div>
@@ -174,7 +188,7 @@
             <!-- /card body -->
 
             <div class="card-body">
-              <table class="table">
+              <table class="table table-responsive">
                 <tr>
                   <th style="width: 10px">No</th>
                   <th>Nama Perangkat</th>
@@ -191,21 +205,36 @@
                     <input type="checkbox" class="form-control" :id="r.id" v-model="r.checked">
                   </td>
                   <td>
-                    <input type="text" class="form-control" id="merk" v-model="r.merk">
-                  </td>
-                  <td>
-                    <input type="text" class="form-control" id="type" v-model="r.type">
+                    <input
+                      type="text"
+                      class="form-control text-min-width"
+                      id="merk"
+                      v-model="r.merk"
+                    >
                   </td>
                   <td>
                     <input
                       type="text"
-                      class="form-control"
+                      class="form-control text-min-width"
+                      id="type"
+                      v-model="r.type"
+                    >
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control text-min-width"
                       id="serialNumber"
                       v-model="r.serial_number"
                     >
                   </td>
                   <td>
-                    <input type="text" class="form-control" id="approval" v-model="r.approval">
+                    <input
+                      type="text"
+                      class="form-control text-min-width"
+                      id="approval"
+                      v-model="r.approval"
+                    >
                   </td>
                 </tr>
               </table>

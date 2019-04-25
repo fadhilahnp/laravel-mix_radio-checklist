@@ -18,7 +18,7 @@
         <li class="nav-item active">
           <a class="nav-link" href="/dashboard">Home</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="/ship-detail">Tambah Data</a>
         </li>
         <li class="nav-item">
