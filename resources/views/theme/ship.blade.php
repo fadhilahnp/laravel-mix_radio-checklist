@@ -36,7 +36,10 @@
                             <div class="col-md-6 text-white">
                                 <h4>Perangkat Radio</h4>
                             </div>
-                            <div class="col-md-6 text-right"><a href="{{ url('/create') }}" class="btn btn-light">Tambah Data</a></div>
+                            <div class="col-md-6 text-right">
+                                <a href="{{ url('/create') }}" class="btn btn-light">
+                                    <font-awesome-icon icon="user-secret" />Tambah Data</a>
+                            </div>
                         </div>
                     </div>
 
@@ -87,7 +90,11 @@
                                         <a href="#" class="btn btn-danger">Hapus</a></div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="12" class="py-3 text-center text-muted">Data tidak ditemukan.</td>
+                            </tr>
                         </table>
+                        <div class="alert text-center text-muted">Data tidak ditemukan.</div>
                     </div>
 
                     <div class="card-footer">

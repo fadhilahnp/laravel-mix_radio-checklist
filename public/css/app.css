@@ -11138,3 +11138,7 @@ a.text-dark:focus {
   border: none;
 }
 
+.text-min-width {
+  min-width: 6rem;
+}
+
