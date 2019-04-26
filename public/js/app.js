@@ -12529,11 +12529,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -12584,7 +12579,7 @@ __webpack_require__.r(__webpack_exports__);
         Vue.set(vm.$data, "ship", resp.data.ship);
         vm.ship.detail.forEach(function (value, key) {
           var idx = vm.getIndex(vm.radio, value.radio_id);
-          Vue.set(vm.radio[idx], "checked", true);
+          vm.radio[idx].checked = true;
           vm.radio[idx].merk = value.merk;
           vm.radio[idx].type = value.type;
           vm.radio[idx].serial_number = value.serial_number;
@@ -50513,7 +50508,8 @@ var render = function() {
                             attrs: {
                               type: "year",
                               format: "YYYY",
-                              id: "thnLetakLunas"
+                              id: "thnLetakLunas",
+                              lang: _vm.lang
                             },
                             model: {
                               value: _vm.ship.thn_letak_lunas,

@@ -41,12 +41,6 @@
                   </div>
                   <div class="form-group">
                     <label for="name">Gross Tonnage:</label>
-                    <!-- <input
-                      type="text"
-                      class="form-control"
-                      id="grossTonnage"
-                      v-model="ship.gross_tonnage"
-                    >-->
                     <div class="input-group">
                       <input
                         type="text"
@@ -145,6 +139,7 @@
                       format="YYYY"
                       id="thnLetakLunas"
                       v-model="ship.thn_letak_lunas"
+                      :lang="lang"
                       class="w-100"
                     />
                   </div>
@@ -325,7 +320,7 @@ export default {
           vm.ship.detail.forEach(function(value, key) {
             const idx = vm.getIndex(vm.radio, value.radio_id);
 
-            Vue.set(vm.radio[idx], "checked", true);
+            vm.radio[idx].checked = true;
             vm.radio[idx].merk = value.merk;
             vm.radio[idx].type = value.type;
             vm.radio[idx].serial_number = value.serial_number;
