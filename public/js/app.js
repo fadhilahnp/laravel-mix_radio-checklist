@@ -12529,11 +12529,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -12582,14 +12577,40 @@ __webpack_require__.r(__webpack_exports__);
       var vm = this;
       axios.get("/api/ship/" + id).then(function (resp) {
         Vue.set(vm.$data, "ship", resp.data.ship);
-        vm.ship.detail.forEach(function (value, key) {
-          var idx = vm.getIndex(vm.radio, value.radio_id);
-          Vue.set(vm.radio[idx], "checked", true);
-          vm.radio[idx].merk = value.merk;
-          vm.radio[idx].type = value.type;
-          vm.radio[idx].serial_number = value.serial_number;
-          vm.radio[idx].approval = value.approval;
-        });
+
+        for (var i = 0; i < vm.radio.length; i++) {
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = vm.ship.detail[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var detail = _step.value;
+
+              if (vm.radio[i].id == detail.radio_id) {
+                vm.radio[i].checked = true;
+                vm.radio[i].merk = detail.merk;
+                vm.radio[i].type = detail.type;
+                vm.radio[i].serial_number = detail.serial_number;
+                vm.radio[i].approval = detail.approval;
+              }
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
+          }
+        }
+
         vm.isLoading = false;
       }).catch(function (error) {
         console.log(error);
@@ -12622,12 +12643,6 @@ __webpack_require__.r(__webpack_exports__);
           vm.ship.detail.push(value);
         }
       });
-    },
-    getIndex: function getIndex(arr, value) {
-      var idx = arr.map(function (e) {
-        return e.id;
-      });
-      return idx.indexOf(value);
     },
     submit: function submit() {
       var vm = this;
@@ -50513,7 +50528,8 @@ var render = function() {
                             attrs: {
                               type: "year",
                               format: "YYYY",
-                              id: "thnLetakLunas"
+                              id: "thnLetakLunas",
+                              placeholder: "Pilih Tahun"
                             },
                             model: {
                               value: _vm.ship.thn_letak_lunas,

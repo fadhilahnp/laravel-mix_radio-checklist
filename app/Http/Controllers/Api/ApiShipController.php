@@ -15,20 +15,17 @@ class ApiShipController extends Controller
 {
     public function index(Request $request)
     {
-        // $ship = Ship::join('users', 'users.id', '=', 'ship.admin_id')
-        // ->select('ship.*', 'users.name as admin_name')
-        // ->paginate(10);
-
         $ship = Ship::join('users', 'users.id', '=', 'ship.admin_id')
-        ->select('ship.*', 'users.name as admin_name')
-        ->when($request->keyword, function ($query) use ($request) {
-            return $query->where('ship_name', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('call_sign', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('port_register', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('radio_area', 'LIKE', '%' . $request->keyword . '%')
-                ->orWhere('users.name', 'LIKE', '%' . $request->keyword . '%');
-        })
-        ->paginate(10);
+            ->select('ship.*', 'users.name as admin_name')
+            ->latest()
+            ->when($request->keyword, function ($query) use ($request) {
+                return $query->where('ship_name', 'LIKE', '%' . $request->keyword . '%')
+                    ->orWhere('call_sign', 'LIKE', '%' . $request->keyword . '%')
+                    ->orWhere('port_register', 'LIKE', '%' . $request->keyword . '%')
+                    ->orWhere('radio_area', 'LIKE', '%' . $request->keyword . '%')
+                    ->orWhere('users.name', 'LIKE', '%' . $request->keyword . '%');
+                })
+            ->paginate(10);
 
         $ship->appends($request->only('keyword'));
 
@@ -77,6 +74,7 @@ class ApiShipController extends Controller
         foreach($repo as $x) {
             $detail[] = [
                 'id' => $x->id,
+                'checked' => 'false',
                 'ref_no' => $x->ref_no,
                 'radio_id' => $x->radio_id,
                 'merk' => $x->merk,
@@ -130,6 +128,8 @@ class ApiShipController extends Controller
         $ship->save();
 
         if (!empty($detail)) {
+            $rowDetail = ShipDetail::where('ref_no', $ref_no)->delete();
+
             foreach ($detail as $x) {
                 ShipDetail::updateOrCreate(
                 [
