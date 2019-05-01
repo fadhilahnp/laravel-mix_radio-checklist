@@ -4,3 +4,14 @@ password: hs@YQWV6PE3x)GM$tDT7
 db_name: id9310158_radio_checklist
 db_user: id9310158_admin
 db_password: hs@YQWV6PE3x)GM$tDT7
+
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=fnpcodex_radio
+DB_USERNAME=fnpcodex
+DB_PASSWORD=[g92B6dUB8j;Gg
+
+$app->bind('path.public', function() {
+return __DIR__;
+});

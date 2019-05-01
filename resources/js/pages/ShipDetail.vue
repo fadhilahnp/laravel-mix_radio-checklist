@@ -139,7 +139,7 @@
                       format="YYYY"
                       id="thnLetakLunas"
                       v-model="ship.thn_letak_lunas"
-                      :lang="lang"
+                      placeholder="Pilih Tahun"
                       class="w-100"
                     />
                   </div>
@@ -317,15 +317,17 @@ export default {
         .then(function(resp) {
           Vue.set(vm.$data, "ship", resp.data.ship);
 
-          vm.ship.detail.forEach(function(value, key) {
-            const idx = vm.getIndex(vm.radio, value.radio_id);
-
-            vm.radio[idx].checked = true;
-            vm.radio[idx].merk = value.merk;
-            vm.radio[idx].type = value.type;
-            vm.radio[idx].serial_number = value.serial_number;
-            vm.radio[idx].approval = value.approval;
-          });
+          for (var i = 0; i < vm.radio.length; i++) {
+            for (const detail of vm.ship.detail) {
+              if (vm.radio[i].id == detail.radio_id) {
+                vm.radio[i].checked = true;
+                vm.radio[i].merk = detail.merk;
+                vm.radio[i].type = detail.type;
+                vm.radio[i].serial_number = detail.serial_number;
+                vm.radio[i].approval = detail.approval;
+              }
+            }
+          }
 
           vm.isLoading = false;
         })
@@ -370,13 +372,6 @@ export default {
           vm.ship.detail.push(value);
         }
       });
-    },
-    getIndex(arr, value) {
-      const idx = arr.map(function(e) {
-        return e.id;
-      });
-
-      return idx.indexOf(value);
     },
     submit() {
       var vm = this;

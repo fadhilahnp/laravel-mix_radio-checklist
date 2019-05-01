@@ -17,6 +17,7 @@ class ApiShipController extends Controller
     {
         $ship = Ship::join('users', 'users.id', '=', 'ship.admin_id')
             ->select('ship.*', 'users.name as admin_name')
+            ->latest()
             ->when($request->keyword, function ($query) use ($request) {
                 return $query->where('ship_name', 'LIKE', '%' . $request->keyword . '%')
                     ->orWhere('call_sign', 'LIKE', '%' . $request->keyword . '%')
@@ -24,7 +25,6 @@ class ApiShipController extends Controller
                     ->orWhere('radio_area', 'LIKE', '%' . $request->keyword . '%')
                     ->orWhere('users.name', 'LIKE', '%' . $request->keyword . '%');
                 })
-            ->latest()
             ->paginate(10);
 
         $ship->appends($request->only('keyword'));
@@ -128,6 +128,8 @@ class ApiShipController extends Controller
         $ship->save();
 
         if (!empty($detail)) {
+            $rowDetail = ShipDetail::where('ref_no', $ref_no)->delete();
+
             foreach ($detail as $x) {
                 ShipDetail::updateOrCreate(
                 [
